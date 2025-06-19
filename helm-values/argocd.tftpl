@@ -1,0 +1,18 @@
+global:
+  domain: argocd.d01.hdcss.com
+
+configs:
+  params:
+    server.insecure: true
+
+server:
+  ingress:
+    enabled: true
+    controller: generic
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/scheme: internet-facing
+      nginx.ingress.kubernetes.io/target-type: ip
+      nginx.ingress.kubernetes.io/backend-protocol: HTTP
+      nginx.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}, {"HTTPS":443}]'
+      nginx.ingress.kubernetes.io/ssl-redirect: '443'
