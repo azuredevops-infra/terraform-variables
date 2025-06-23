@@ -26,7 +26,7 @@ enable_azure_key_vault_csi = true
 # Disable complex ones for development
 enable_external_dns        = false
 enable_prometheus_stack    = false
-enable_argocd             = false
+enable_argocd             = true
 enable_cluster_autoscaler = false
 enable_keda               = false
 enable_velero = false
