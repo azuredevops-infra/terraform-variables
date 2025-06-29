@@ -58,24 +58,25 @@ service_bus_sku = "Standard"
 service_bus_capacity = 0
 alert_email     = "saxenaoorja@gmail.com"
 
+# Certificate Management
 certificates_config = {
-  "test-wildcard" = {
-    issuer             = "Self"                          # Self-signed for private zone
+  "harorbcomm-wildcard" = {
+    issuer             = "Self"                           # Self-signed for private zone
     validity_months    = 12
-    san_names          = ["*.test.com", "test.com"]
-    create_dns_record  = false                           # Don't auto-create DNS records for private zone
-    dns_record_name    = ""                              # Not used when create_dns_record = false
+    san_names          = ["*.harorbcomm.d01.hdcss.com", "harorbcomm.d01.hdcss.com"]
+    create_dns_record  = false                            # Don't auto-create DNS records for private zone
+    dns_record_name    = ""                               # Not used when create_dns_record = false
     dns_ttl            = 300
-    dns_records        = []                              # Not used when create_dns_record = false
+    dns_records        = []                               # Not used when create_dns_record = false
   }
-} 
+}
 
 key_vault_allowed_ips = ["0.0.0.0/0"]
 
 # DNS Configuration - Disabled for dev
-root_domain             = ""   # Keep empty for private DNS zone
-create_dns_zone        = false
-dns_zone_resource_group = ""
+root_domain             = "harorbcomm.d01.hdcss.com"   # Keep empty for private DNS zone
+create_dns_zone        = true
+dns_zone_resource_group = "oorja-dev-rg"
 
 # Workload Identities (in AKS module)
 # Minimal setup for development
@@ -93,11 +94,11 @@ workload_identities = {
   # }
 }
 
-# Enhanced Node Pools - Keep default for dev
+
 # The existing node_pools variable will use the default simple configuration
 enable_node_pools = false  # Already set to false by default
 
-# Custom Storage Classes
+
 # Simple storage class for development testing
 custom_storage_classes = {
   # "dev-storage" = {
@@ -169,7 +170,7 @@ k8s_role_bindings = {}  # Not needed for basic dev
 # Helm Template Variables
 helm_template_values = true
 helm_template_vars = { 
-  domain_name = "test.com"                               # Your private DNS domain
+  domain_name = "harorbcomm.d01.hdcss.com"             # Your private DNS domain
   app_gateway_ip = "10.0.4.100"                        # App Gateway internal IP
 }
 

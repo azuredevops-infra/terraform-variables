@@ -1,31 +1,77 @@
 global:
-  domain: test.com
+  domain: ${domain_name}
 
 configs:
   params:
     server.insecure: true
+    # CRITICAL: Configure ArgoCD for /admin path
     server.rootpath: /admin
+    server.grpc.web: true
 
 server:
+  # CRITICAL: Configure ArgoCD to work under /admin path
   extraArgs:
     - --basehref=/admin
     - --insecure
+    - --grpc-web
 
   ingress:
     enabled: true
     ingressClassName: nginx
     annotations:
-      nginx.ingress.kubernetes.io/backend-protocol: HTTP
-      nginx.ingress.kubernetes.io/rewrite-target: /admin/$1
+      # Path rewriting for ArgoCD under /admin
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
       nginx.ingress.kubernetes.io/use-regex: "true"
-      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/backend-protocol: HTTP
+      # GRPC support for ArgoCD
+      nginx.ingress.kubernetes.io/grpc-backend: "true"
+      # Proxy configurations
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+      nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      # Additional headers for proper routing
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "X-Forwarded-Proto: https";
+        more_set_headers "X-Forwarded-For: $proxy_add_x_forwarded_for";
     hosts:
-      - host: test.com
-        paths:
-          - path: /admin/(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: argocd-dev-server
-                port:
-                  number: 80
+      - ${domain_name}
+    paths:
+      - path: /admin/(.*)
+        pathType: ImplementationSpecific
+    tls: []  # TLS handled by Application Gateway
+
+  service:
+    type: ClusterIP
+
+# Configure additional ArgoCD components
+controller:
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+
+dex:
+  enabled: false
+
+repoServer:
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+
+redis:
+  enabled: true
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 200m
