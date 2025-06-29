@@ -10,6 +10,13 @@ subnet_prefixes = {
   private = "10.0.2.0/24"
 }
 
+#Application Gateway
+enable_app_gateway = true                   
+app_gateway_subnet_cidr = "10.0.4.0/24"     
+app_gateway_private_ip = "10.0.4.100"       
+enable_waf = true                           
+waf_mode = "Prevention"  
+
 # AKS - Basic Configuration
 kubernetes_version = "1.32.4"
 node_count         = 1
@@ -21,7 +28,7 @@ enable_helm_charts         = true
 deploy_helm_charts         = true
 enable_nginx_ingress       = true
 enable_cert_manager        = true
-enable_azure_key_vault_csi = true
+enable_azure_key_vault_csi = false  #already created
 
 # Disable complex ones for development
 enable_external_dns        = false
@@ -35,11 +42,10 @@ enable_velero = false
 external_dns_domain_filters = []
 external_dns_client_id     = ""
 external_dns_client_secret = ""
+
 # Disable all complex features
 enable_private_endpoints = false
 enable_firewall         = false
-enable_app_gateway      = false
-enable_waf              = false
 enable_grafana          = false
 enable_prometheus       = false
 enable_defender         = false
@@ -52,20 +58,22 @@ service_bus_sku = "Standard"
 service_bus_capacity = 0
 alert_email     = "saxenaoorja@gmail.com"
 
-# Certificate Management (in Key Vault module)
-# For development, we'll keep this simple or disabled
 certificates_config = {
-  # Uncomment below if you want to test certificate creation
-  # "dev-app" = {
-  #   issuer          = "Self"
-  #   validity_months = 12
-  #   san_names       = []
-  #   create_dns_record = false  # No DNS in dev
-  # }
-}
+  "test-wildcard" = {
+    issuer             = "Self"                          # Self-signed for private zone
+    validity_months    = 12
+    san_names          = ["*.test.com", "test.com"]
+    create_dns_record  = false                           # Don't auto-create DNS records for private zone
+    dns_record_name    = ""                              # Not used when create_dns_record = false
+    dns_ttl            = 300
+    dns_records        = []                              # Not used when create_dns_record = false
+  }
+} 
+
+key_vault_allowed_ips = ["0.0.0.0/0"]
 
 # DNS Configuration - Disabled for dev
-root_domain             = ""  # Set this if you have a domain for testing
+root_domain             = ""   # Keep empty for private DNS zone
 create_dns_zone        = false
 dns_zone_resource_group = ""
 
@@ -158,9 +166,12 @@ k8s_cluster_role_bindings = {
 
 k8s_role_bindings = {}  # Not needed for basic dev
 
-# Helm Templating
+# Helm Template Variables
 helm_template_values = true
-helm_template_vars = { domain_name = "azuredev.com"}
+helm_template_vars = { 
+  domain_name = "test.com"                               # Your private DNS domain
+  app_gateway_ip = "10.0.4.100"                        # App Gateway internal IP
+}
 
 # Helm releases configuration
 helm_releases = {
