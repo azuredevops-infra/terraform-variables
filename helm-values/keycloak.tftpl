@@ -1,5 +1,5 @@
 auth:
-  adminUser:  admin
+  adminUser: admin
   adminPassword: keycloak123
 
 service:
@@ -21,16 +21,18 @@ proxy: edge
 ingress:
   enabled: true
   ingressClassName: nginx
-  hostname: keycloak.d01.hdcss.com
-  path: /
+  hostname: test.com
+  path: /auth
   pathType: Prefix
   annotations:
-
     nginx.ingress.kubernetes.io/scheme: internet-facing
     nginx.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
-    nginx.ingress.kubernetes.io/ssl-redirect: "443"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
     nginx.ingress.kubernetes.io/target-type: ip
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /auth/$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
 
 production: true
 
@@ -41,3 +43,13 @@ resources:
     memory: 512Mi
   limits:
     memory: 1024Mi
+
+extraEnvVars:
+  - name: KC_PROXY
+    value: "edge"
+  - name: KC_HOSTNAME_STRICT
+    value: "false"
+  - name: KC_HTTP_ENABLED
+    value: "true"
+  - name: KC_HTTP_RELATIVE_PATH
+    value: "/auth"
