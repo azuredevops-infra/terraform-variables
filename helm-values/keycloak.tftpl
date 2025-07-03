@@ -2,94 +2,44 @@ auth:
   adminUser: admin
   adminPassword: keycloak123
 
-# CRITICAL: Configure Keycloak for /auth path
-extraEnvVars:
-  - name: KC_HTTP_RELATIVE_PATH
-    value: "/auth"
-  - name: KC_PROXY
-    value: "edge"
+httpRelativePath: "/auth"
+
+proxy:
+  mode: edge
+
+extraEnv: |
   - name: KC_HOSTNAME_STRICT
     value: "false"
-  - name: KC_HOSTNAME_STRICT_HTTPS
+  - name: KC_HOSTNAME_STRICT_HTTPS 
     value: "false"
   - name: KC_HTTP_ENABLED
     value: "true"
-  - name: KC_HOSTNAME_URL
-    value: "https://${domain_name}/auth"
-  - name: KC_HOSTNAME_ADMIN_URL
-    value: "https://${domain_name}/auth"
+  - name: KC_HOSTNAME
+    value: "${domain_name}"
+
+postgresql:
+  enabled: false  
 
 service:
   type: ClusterIP
 
-global:
-  storageClass: default
-
-postgresql:
-  enabled: true
-  primary:
-    persistence:
-      storageClass: default
-  auth:
-    password: bn_keycloak123
-
-# Set proxy mode for reverse proxy setup
-proxy: edge
-
 ingress:
   enabled: true
   ingressClassName: nginx
-  hostname: ${domain_name}
-  path: /auth
-  pathType: Prefix
   annotations:
-    # Path rewriting for Keycloak under /auth
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
-    nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
-    # Proxy configurations for Keycloak
-    nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
-    nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
-    nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "256k"
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    # Additional headers for proper routing
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      more_set_headers "X-Forwarded-Proto: https";
-      more_set_headers "X-Forwarded-Host: ${domain_name}";
-      more_set_headers "X-Forwarded-Port: 443";
-  # Custom paths for Keycloak under /auth
-  extraPaths:
-    - path: /auth/(.*)
-      pathType: ImplementationSpecific
-  # TLS handled by Application Gateway
-  tls: []
-
-production: true
-
-resourcesPreset: ""
+    nginx.ingress.kubernetes.io/priority: "100"
+  rules:
+    - host: ${domain_name}
+      paths:
+        - path: /auth
+          pathType: Prefix
 
 resources:
   requests:
-    memory: 512Mi
-    cpu: 250m
+    memory: 256Mi
+    cpu: 100m
   limits:
-    memory: 1024Mi
-    cpu: 500m
-
-# Health check configuration
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 300
-  periodSeconds: 30
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 3
-
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 3
+    memory: 512Mi
+    cpu: 300m

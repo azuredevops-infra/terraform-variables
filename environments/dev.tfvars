@@ -13,7 +13,7 @@ subnet_prefixes = {
 #Application Gateway
 enable_app_gateway = true                   
 app_gateway_subnet_cidr = "10.0.4.0/24"     
-app_gateway_private_ip = "10.0.4.100"       
+app_gateway_private_ip = "10.0.1.6"       
 enable_waf = true                           
 waf_mode = "Prevention"  
 
@@ -186,7 +186,7 @@ helm_releases = {
   "keycloak-dev" = {
     chart            = "keycloak"
     namespace        = "keycloak"            
-    repository       = "oci://registry-1.docker.io/bitnamicharts"
+    repository       = "https://codecentric.github.io/helm-charts"
     values_file      = "keycloak.tftpl"
     create_namespace = true                            
   }
