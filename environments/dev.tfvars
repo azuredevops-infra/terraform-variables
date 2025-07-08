@@ -32,11 +32,77 @@ enable_azure_key_vault_csi = false  #already created
 
 # Disable complex ones for development
 enable_external_dns        = false
-enable_prometheus_stack    = false
+enable_prometheus_stack    = true
 enable_argocd             = true
 enable_cluster_autoscaler = false
 enable_keda               = false
 enable_velero = false
+
+# Observability Stack Configuration
+enable_observability_stack = true
+observability_namespace    = "observability"
+
+# Azure managed services
+enable_grafana          = true
+enable_grafana_datasources = true
+enable_prometheus       = true
+
+grafana_admin_users = ["299b42cc-b252-4e9e-bef2-f4c5370ebdca"]
+
+grafana_viewer_users = [
+  # Add other users who should have viewer access
+]
+
+# Enable components for development
+enable_loki           = true
+enable_tempo          = true
+enable_mimir          = false  
+enable_promtail       = true
+enable_otel_collector = true
+
+# Retention periods (shorter for dev)
+loki_retention_period   = "72h"  # 3 days
+tempo_retention_period  = "72h"   # 3 days
+mimir_retention_period  = "720h"  # 30 days
+
+# Storage sizes (smaller for dev)
+loki_storage_size  = "10Gi"
+tempo_storage_size = "10Gi"
+mimir_storage_size = "50Gi"
+
+# Resource limits (smaller for dev)
+loki_resources = {
+  requests = {
+    cpu    = "250m"
+    memory = "512Mi"
+  }
+  limits = {
+    cpu    = "500m"
+    memory = "1Gi"
+  }
+}
+
+tempo_resources = {
+  requests = {
+    cpu    = "250m"
+    memory = "512Mi"
+  }
+  limits = {
+    cpu    = "500m"
+    memory = "1Gi"
+  }
+}
+
+mimir_resources = {
+  requests = {
+    cpu    = "500m"
+    memory = "1Gi"
+  }
+  limits = {
+    cpu    = "1000m"
+    memory = "2Gi"
+  }
+}
 
 # External DNS (if enabled later)
 external_dns_domain_filters = []
@@ -46,8 +112,6 @@ external_dns_client_secret = ""
 # Disable all complex features
 enable_private_endpoints = false
 enable_firewall         = false
-enable_grafana          = false
-enable_prometheus       = false
 enable_defender         = false
 private_cluster_enabled = false
 enable_bastion = false
@@ -193,7 +257,7 @@ helm_releases = {
 }
 
 tags = {
-  Environment = "Development"
+  Environment = "Development" 
   ManagedBy   = "Terraform"
   Owner       = "Shiva/Oorja"
   Project     = "Intern Project" 
