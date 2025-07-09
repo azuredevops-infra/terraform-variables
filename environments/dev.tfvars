@@ -127,7 +127,7 @@ certificates_config = {
   "harorbcomm-wildcard" = {
     issuer             = "Self"                           # Self-signed for private zone
     validity_months    = 12
-    san_names          = ["*.harorbcomm.d01.hdcss.com", "harorbcomm.d01.hdcss.com"]
+    san_names          = ["*.genesis-azure.d01.hdcss.com", "genesis-azure.d01.hdcss.com"]
     create_dns_record  = false                            # Don't auto-create DNS records for private zone
     dns_record_name    = ""                               # Not used when create_dns_record = false
     dns_ttl            = 300
@@ -138,9 +138,9 @@ certificates_config = {
 key_vault_allowed_ips = ["0.0.0.0/0"]
 
 # DNS Configuration - Disabled for dev
-root_domain             = "harorbcomm.d01.hdcss.com"   # Keep empty for private DNS zone
-create_dns_zone        = true
-dns_zone_resource_group = "oorja-dev-rg"
+root_domain             = ""   # Keep empty for private DNS zone
+create_dns_zone        = false
+dns_zone_resource_group = ""
 
 # Workload Identities (in AKS module)
 # Minimal setup for development
@@ -234,7 +234,7 @@ k8s_role_bindings = {}  # Not needed for basic dev
 # Helm Template Variables
 helm_template_values = true
 helm_template_vars = { 
-  domain_name = "harorbcomm.d01.hdcss.com"             # Your private DNS domain
+  domain_name = "genesis-azure.d01.hdcss.com"             # Your private DNS domain
   app_gateway_ip = "10.0.4.100"                        # App Gateway internal IP
 }
 
