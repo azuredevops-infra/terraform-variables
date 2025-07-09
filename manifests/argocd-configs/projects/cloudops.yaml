@@ -1,0 +1,16 @@
+upsert: true
+
+metadata:
+  name: cloudops
+
+spec:
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+
+  destinations:
+    - server: '*'
+      namespace: '*'
+
+  sourceRepos:
+    - '*'

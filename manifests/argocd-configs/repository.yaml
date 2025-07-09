@@ -1,0 +1,26 @@
+repositories:
+  bitnami:
+    method: create
+    enabled: true
+
+  ingress-nginx:
+    method: create
+    enabled: false
+      
+  prometheus-community:
+    method: create
+    enabled: true
+
+  customer-repo:
+    method: create
+    enabled: false
+    
+  genesis:
+    method: create
+    enabled: true
+    secrets:
+      aws:
+        - name: genesis-helm-repo
+          region: us-west-1
+
+    

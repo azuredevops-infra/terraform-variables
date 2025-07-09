@@ -1,0 +1,7 @@
+permission: read
+
+spec:
+  name: prometheus-community
+  repo: "https://prometheus-community.github.io/helm-charts"
+  enableOCI: false
+  type: helm

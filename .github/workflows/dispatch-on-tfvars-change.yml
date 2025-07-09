@@ -1,0 +1,87 @@
+name: Dispatch on tfvars value changes
+
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, assigned, unlocked, synchronize]
+    branches: 
+      - cloudops/**
+  push:
+    branches:
+      - 'cloudops/**'
+    # Adjust these paths to your tfvars and values directories
+    paths:
+      - 'environments/*.tfvars.json'
+
+jobs:
+  detect-change:
+    runs-on: ubuntu-latest
+    outputs:
+      environments: ${{ steps.target-environments.outputs.environments }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get changed files
+        id: changed-tfvars
+        uses: tj-actions/changed-files@v46
+        with:
+          files_yaml: |
+            dev:
+              - environments/dev*.tfvars
+              - environments/dev*.auto.tfvars
+              - environments/dev*.tfvars.json
+            staging:
+              - environments/staging.tfvars
+              - environments/staging.auto.tfvars
+              - environments/staging*.tfvars.json
+            prod:
+              - environments/prod*.tfvars
+              - environments/prod*.auto.tfvars
+              - environments/prod*.tfvars.json
+
+      - name: Test outputs
+        id: target-environments
+        run: |
+          changed_keys=$(echo "${{ steps.changed-tfvars.outputs.changed_keys }}" | jq -ac -R 'split(" ") | { tfvars: . }')
+          echo "environments=$changed_keys" >> $GITHUB_OUTPUT
+          
+  dispatch:
+    needs: detect-change
+    strategy: 
+      matrix: ${{ fromJson(needs.detect-change.outputs.environments) }}
+
+    environment: ${{ matrix.tfvars }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Handle Pull Request Events
+        if: github.event_name == 'pull_request_target'
+        id: event-type-pr
+        run: |
+          echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+      
+      - name: Handle Push Events
+        if: github.event_name == 'push'
+        id: event-type-push
+        run: |
+          echo "sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+          
+      - name: Send repository dispatch to workflows repo
+        # if: steps.changed-tfvars.outputs.dev_only_changed == 'true'
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          # Use a PAT stored in secrets for cross-repo dispatch
+          token: ${{ secrets.GH_PAT }}
+          repository: ${{ vars.TF_WORKFLOW_REPO }}
+          event-type: tfvars-changed
+          client-payload: |
+            {
+              "target_branch": "${{ github.ref_name || github.event.pull_request.head.ref }}",
+              "environment": "${{ matrix.tfvars }}",
+              "event_name": "${{ github.event_name }}",
+              "tf-lifecycle": "${{ vars.TF_LIFECYCLE }}",
+              "commit_sha": "${{ steps.event-type-push.outputs.sha }}",
+              "pr_number": "${{ steps.event-type-pr.outputs.pr_number }}"
+            }
+            

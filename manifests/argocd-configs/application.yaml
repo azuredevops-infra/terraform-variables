@@ -1,0 +1,33 @@
+# < -------- DO NOT EDIT THE FILE NAME ---------- >
+applications:
+  ksm:
+    enabled: true
+    method: create
+
+  nginx-app:
+    enabled: false
+    method: create
+          
+  prometheus-stack:
+    enabled: false
+    method: create
+
+  postgresql:
+    enabled: true
+    method: create
+
+  backend:
+    enabled: true
+    method: create
+
+  testing-agents:
+    enabled: true
+    method: create
+
+  frontend:
+    enabled: true
+    method: create
+
+  customer-app:
+    enabled: false
+    method: create

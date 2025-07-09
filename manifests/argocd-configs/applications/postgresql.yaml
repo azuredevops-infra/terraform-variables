@@ -1,0 +1,22 @@
+metadata:
+  name: postgresql
+
+query_params:
+  upsert: true
+
+spec:
+  destination:
+    namespace: genesis
+    server: https://kubernetes.default.svc
+  source:
+    path: postgresql
+    repoURL: https://github.com/HARMAN-DTS/Genesis
+    targetRevision: HEAD
+  sources: []
+  project: genesis
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

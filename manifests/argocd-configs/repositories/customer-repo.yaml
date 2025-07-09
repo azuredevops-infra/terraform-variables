@@ -1,0 +1,12 @@
+permission: read
+
+query_params:
+  upsert: true
+
+spec:
+  name: customer-repo
+  repo: https://github.com/deshpandeshantanu96/customer-app-helm.git
+  project: cloudops
+  enableOCI: false
+  type: git
+  

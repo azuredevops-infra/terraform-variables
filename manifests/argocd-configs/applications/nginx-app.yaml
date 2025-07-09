@@ -1,0 +1,39 @@
+query_params:
+  upsert: true
+  # validate: true
+
+metadata:
+  name: nginx-app
+
+spec:
+  project: default
+  source:
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    chart: ingress-nginx
+    targetRevision: 4.12.3
+    helm:
+      releaseName: ingress-nginx-public
+      values: |
+        controller:
+          ingressClassResource:
+            name: nginx-public
+            enabled: true
+            default: false
+          ingressClass: nginx-public
+          service:
+            type: LoadBalancer
+            annotations:
+              service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+              service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+              service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+              
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: ingress-nginx
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    

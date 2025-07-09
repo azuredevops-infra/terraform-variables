@@ -1,0 +1,13 @@
+{ 
+  "environments": { 
+    "dev": { 
+      "enabled" : "true" 
+    }, 
+    "staging": { 
+      "enabled": "false" 
+    }, 
+    "prod": { 
+      "enabled": "false" 
+    }
+  } 
+}

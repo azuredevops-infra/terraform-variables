@@ -1,0 +1,21 @@
+metadata:
+  name: customer-app
+
+query_params:
+  upsert: true
+  
+spec:
+  project: cloudops
+  source:
+    repoURL: https://github.com/deshpandeshantanu96/customer-app-helm.git
+    path: .
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,7 @@
+projects:
+  cloudops:
+    enabled: true
+    method: create
+  genesis:
+    enabled: true
+    method: create

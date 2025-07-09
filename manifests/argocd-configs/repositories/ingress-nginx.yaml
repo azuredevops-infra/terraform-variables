@@ -1,0 +1,8 @@
+permission: read
+
+spec:
+  name: ingress-nginx
+  project: default
+  repo: "https://kubernetes.github.io/ingress-nginx"
+  enableOCI: false
+  type: helm

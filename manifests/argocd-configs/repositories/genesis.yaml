@@ -1,0 +1,10 @@
+permission: read
+
+spec:
+  name: genesis
+  repo: "https://github.com/HARMAN-DTS/Genesis"
+  enableOCI: false
+  type: git
+  username: ${username}
+  password: ${password}
+

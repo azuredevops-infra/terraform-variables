@@ -1,0 +1,21 @@
+metadata:
+  name: backend
+
+query_params:
+  upsert: true
+
+spec:
+  project: genesis
+  source:
+    repoURL: https://github.com/HARMAN-DTS/Genesis
+    path: backend
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: genesis
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

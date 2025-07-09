@@ -1,0 +1,13 @@
+permission: read
+
+spec:
+  name: bitnami-oci
+  repo: registry-1.docker.io
+  username: ''
+  password: ''
+  enableOCI: true
+  type: helm
+
+  # query_params:
+  #   upsert: false
+  #   validate: false
