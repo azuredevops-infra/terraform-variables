@@ -238,6 +238,8 @@ helm_template_vars = {
   app_gateway_ip = "10.0.4.100"                        # App Gateway internal IP
 }
 
+grafana_fqdn = "oorja-dev-grafana-gmhgh2fbhbbbb4ep.eus.grafana.azure.com"  # Grafana FQDN for Application Gateway routing
+
 # Helm releases configuration
 helm_releases = {
   "argocd-dev" = {
@@ -253,6 +255,13 @@ helm_releases = {
     repository       = "https://codecentric.github.io/helm-charts"
     values_file      = "keycloak.tftpl"
     create_namespace = true                            
+  }
+  "observability-ingress" = {
+    chart            = "raw"
+    namespace        = "observability"
+    repository       = "https://bedag.github.io/helm-charts"
+    values_file      = "observability.tftpl"
+    create_namespace = false
   }
 }
 
