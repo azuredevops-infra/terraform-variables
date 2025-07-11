@@ -13,7 +13,7 @@ subnet_prefixes = {
 #Application Gateway
 enable_app_gateway = true                   
 app_gateway_subnet_cidr = "10.0.4.0/24"     
-app_gateway_private_ip = "10.0.1.6"       
+app_gateway_private_ip = "10.0.4.100"       
 enable_waf = true                           
 waf_mode = "Prevention"  
 
