@@ -138,9 +138,9 @@ certificates_config = {
 key_vault_allowed_ips = ["0.0.0.0/0"]
 
 # DNS Configuration - Disabled for dev
-root_domain             = ""   # Keep empty for private DNS zone
-create_dns_zone        = false
-dns_zone_resource_group = ""
+root_domain             = "genesis-azure.d01.hdcss.com"   # Keep empty for private DNS zone
+create_dns_zone        = true
+dns_zone_resource_group = "oorja-dev-rg"
 
 # Workload Identities (in AKS module)
 # Minimal setup for development
