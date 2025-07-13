@@ -1,0 +1,7 @@
+permission: read
+
+spec:
+  name: bedag
+  repo: "https://bedag.github.io/helm-charts"
+  enableOCI: false
+  type: helm
