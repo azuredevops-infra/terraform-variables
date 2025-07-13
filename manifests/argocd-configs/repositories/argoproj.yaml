@@ -1,0 +1,7 @@
+permission: read
+
+spec:
+  name: argoproj
+  repo: "https://argoproj.github.io/argo-helm"
+  enableOCI: false
+  type: helm
