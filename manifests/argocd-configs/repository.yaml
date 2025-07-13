@@ -3,24 +3,28 @@ repositories:
     method: create
     enabled: true
 
-  ingress-nginx:
+  argoproj:
     method: create
-    enabled: false
-      
+    enabled: true
+
+  codecentric:
+    method: create
+    enabled: true
+
+  bedag:
+    method: create
+    enabled: true
+
   prometheus-community:
     method: create
     enabled: true
 
-  customer-repo:
-    method: create
-    enabled: false
-    
   genesis:
     method: create
     enabled: true
     secrets:
       azure:
         vault_url: "https://oorja-dev-kv-bnk4ys.vault.azure.net/"
-        secret_names: 
+        secret_names:
           - "genesis-username"
           - "genesis-password"
