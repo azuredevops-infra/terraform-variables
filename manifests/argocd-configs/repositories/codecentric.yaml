@@ -1,0 +1,7 @@
+permission: read
+
+spec:
+  name: codecentric
+  repo: "https://codecentric.github.io/helm-charts"
+  enableOCI: false
+  type: helm
