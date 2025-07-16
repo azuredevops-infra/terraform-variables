@@ -14,8 +14,8 @@ subnet_prefixes = {
 enable_app_gateway = true                   
 app_gateway_subnet_cidr = "10.0.4.0/24"     
 app_gateway_private_ip = "10.0.4.100"       
-enable_waf = true                           
-waf_mode = "Prevention"  
+enable_waf = false #Not supported in Basic SKU                           
+# waf_mode = "Prevention"  
 
 # AKS - Basic Configuration
 kubernetes_version = "1.32.4"
@@ -42,16 +42,13 @@ enable_velero = false
 enable_observability_stack = true
 observability_namespace    = "observability"
 
-# Azure managed services
-enable_grafana          = true
-enable_grafana_datasources = true
-enable_prometheus       = true
-
-grafana_admin_users = ["299b42cc-b252-4e9e-bef2-f4c5370ebdca"]
-
-grafana_viewer_users = [
-  # Add other users who should have viewer access
-]
+# Open Source Monitoring Stack
+enable_opensource_grafana    = true
+enable_opensource_prometheus = true
+grafana_domain              = "genesis-azure.d01.hdcss.com"
+grafana_admin_password      = "admin123"  # Change this to a secure password
+prometheus_retention        = "15d"
+prometheus_storage_size     = "30Gi"
 
 # Enable components for development
 enable_loki           = true
@@ -124,7 +121,7 @@ alert_email     = "saxenaoorja@gmail.com"
 
 # Certificate Management
 certificates_config = {
-  "harorbcomm-wildcard" = {
+  "azure-wildcard" = {
     issuer             = "Self"                           # Self-signed for private zone
     validity_months    = 12
     san_names          = ["*.genesis-azure.d01.hdcss.com", "genesis-azure.d01.hdcss.com"]
@@ -137,8 +134,8 @@ certificates_config = {
 
 key_vault_allowed_ips = ["0.0.0.0/0"]
 
-# DNS Configuration - Disabled for dev
-root_domain             = "genesis-azure.d01.hdcss.com"   # Keep empty for private DNS zone
+# DNS Configuration 
+root_domain             = "genesis-azure.d01.hdcss.com" 
 create_dns_zone        = true
 dns_zone_resource_group = "oorja-dev-rg"
 
@@ -238,8 +235,6 @@ helm_template_vars = {
   app_gateway_ip = "10.0.4.100"                        # App Gateway internal IP
 }
 
-grafana_fqdn = "oorja-dev-grafana-gmhgh2fbhbbbb4ep.eus.grafana.azure.com"  # Grafana FQDN for Application Gateway routing
-
 # Helm releases configuration
 helm_releases = {
   "argocd-dev" = {
@@ -261,6 +256,13 @@ helm_releases = {
     namespace        = "observability"
     repository       = "https://bedag.github.io/helm-charts"
     values_file      = "observability.tftpl"
+    create_namespace = false
+  }
+  "monitoring-ingress" = {
+    chart            = "raw"
+    namespace        = "monitoring"
+    repository       = "https://bedag.github.io/helm-charts"
+    values_file      = "monitoring.tftpl"
     create_namespace = false
   }
 }
