@@ -1,4 +1,4 @@
-# Azure AKS GitOps Configuration Repository
+# Azure Terraform Variables Module
 
 This repository serves as the central configuration hub for Azure AKS infrastructure deployments, managing environment-specific Terraform variables, ArgoCD configurations, and Helm chart templates in a GitOps approach. It works in conjunction with the [Azure AKS Terraform Infrastructure Module](link-to-terraform-repo) to provide a complete Infrastructure as Code (IaC) and Configuration as Code (CaC) solution.
 
@@ -500,24 +500,12 @@ helm template <release-name> <chart> -f <values-file>
 - [Helm Documentation](https://helm.sh/docs/)
 
 ### Related Repositories
-- **Terraform Infrastructure Module** - Core AKS infrastructure
-- **Application Source Repositories** - Microservice source code
+- **Terraform Configurations Repository** - Core AKS infrastructure
 - **Terraform Workflows Repository** - CI/CD automation
-
-### Support Channels
-- **Platform Engineering Team** - Infrastructure questions
-- **Development Teams** - Application configuration
-- **Security Team** - Security and compliance
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Maintainers
-
-- **Platform Engineering Team** - Infrastructure and GitOps
-- **DevOps Team** - CI/CD and automation
-- **Security Team** - Security and compliance
 
 ---
 
