@@ -267,18 +267,16 @@ extraEnv: |
 
 ## 🛠️ Usage Guide
 
-### Prerequisites
+### Prerequisites - Required Secrets
 
-**Required GitHub Secrets:**
-| Secret | Scope | Description |
-|--------|-------|-------------|
-| `GH_PAT` | Repository | GitHub Personal Access Token with workflow permissions |
-
-**Required GitHub Variables:**
-| Variable | Scope | Description |
-|----------|-------|-------------|
-| `TF_WORKFLOW_REPO` | Repository | Remote Terraform workflow repository (`owner/repo`) |
-| `TF_LIFECYCLE` | Environment | Terraform operation (`init`, `plan`, `apply`, `plan-apply`) |
+| Secret | Scope | Description | Example |
+|--------|-------|-------------|---------|
+| `GH_PAT` | Repository | GitHub Personal Access Token for cross-repo access | `ghp_xxxxxxxxxxxxxxxxxxxx` |
+| `ARM_CLIENT_ID` | Environment | Azure Service Principal/Application ID | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+| `ARM_CLIENT_SECRET` | Environment | Azure Service Principal Secret | `xxxxxxxxxxxxxxxxxxxxxxxx` |
+| `ARM_TENANT_ID` | Environment | Azure Tenant ID | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+| `ARM_SUBSCRIPTION_ID` | Environment | Azure Subscription ID | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+| `GENESIS_PAT_TOKEN` | Repository | GitHub token for Genesis repository access | `ghp_xxxxxxxxxxxxxxxxxxxx` |
 
 ### Environment Setup
 
